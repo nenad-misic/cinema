@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import { api } from '../../Environment/environment';
+import { api, current_cors, headers } from '../../Environment/environment';
 import { compareTwoStrings } from 'string-similarity';
 
 class WatchMovie extends Component {
@@ -16,7 +16,7 @@ class WatchMovie extends Component {
   async componentDidMount() {
     const { match: { params } } = this.props;
     const movie = (await axios.get(`${api}movie_details.json?movie_id=${params.movieId}`)).data.data.movie;
-    const vidcloudlist = (await axios.get(`https://vidcloud9.com/search.html`, {params: {keyword: movie.title}}));
+    const vidcloudlist = (await axios.get(`${current_cors()}/https://vidcloud9.com/search.html`, {params: {keyword: movie.title}}, headers));
 
     const parser = new DOMParser();
     const vidcloudlistdom = parser.parseFromString(vidcloudlist.data, 'text/html');
@@ -34,7 +34,7 @@ class WatchMovie extends Component {
                 });
     const href = hrefl.reduce((a,b) => a.rating > b.rating ? a : b).href;
 
-    const vidcloudvideo = (await axios.get(`https://vidcloud9.com${href}`));
+    const vidcloudvideo = (await axios.get(`${current_cors()}/https://vidcloud9.com${href}`, headers));
     const vidcloudvideodom = parser.parseFromString(vidcloudvideo.data, 'text/html');
 
     const iframesrc = vidcloudvideodom.querySelectorAll('iframe')[0].getAttribute('src');

@@ -13,10 +13,8 @@ class App extends Component {
     return (
       <div className="App">
         <NavBar></NavBar>
-      
         <Route exact path='/' component={Suggestions}/>
- 
-        <Route exact path='/cinemax' component={Suggestions}/>
+        <Route exact path='/cinema' component={Suggestions}/>
         <Route exact path='/movies' component={Movies}/>
         <Route exact path='/shows' component={Shows}/>
         <Route exact path='/movie/:movieId' component={Movie}/>

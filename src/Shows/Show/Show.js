@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import { compareTwoStrings } from 'string-similarity';
+import { api, current_cors, headers } from '../../Environment/environment';
 
 class Show extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Show extends Component {
   async componentDidMount() {
     const { match: { params } } = this.props;
     const showTitle = params.showTitle;
-    const vidcloudlist = (await axios.get(`https://vidcloud9.com/search.html`, {params: {keyword: showTitle}}));
+    const vidcloudlist = (await axios.get(`${current_cors()}/https://vidcloud9.com/search.html`, {params: {keyword: showTitle}}, headers));
 
     const parser = new DOMParser();
     const vidcloudlistdom = parser.parseFromString(vidcloudlist.data, 'text/html');
@@ -36,7 +37,7 @@ class Show extends Component {
                 });
     const href = hrefl.reduce((a,b) => a.rating > b.rating ? a : b).href;
 
-    const vidcloudvideo = (await axios.get(`https://vidcloud9.com${href}`));
+    const vidcloudvideo = (await axios.get(`${current_cors()}/https://vidcloud9.com${href}`, headers));
     const vidcloudvideodom = parser.parseFromString(vidcloudvideo.data, 'text/html');
 
     const iframesrc = vidcloudvideodom.querySelectorAll('iframe')[0].getAttribute('src');
@@ -66,24 +67,12 @@ class Show extends Component {
         return;
     }
 
-    const vidcloudvideo = (await axios.get(`https://vidcloud9.com${element.link}`));
+    const vidcloudvideo = (await axios.get(`${current_cors()}/https://vidcloud9.com${element.link}`, headers));
     
     const parser = new DOMParser();
     const vidcloudvideodom = parser.parseFromString(vidcloudvideo.data, 'text/html');
     
     const iframesrc = vidcloudvideodom.querySelectorAll('iframe')[0].getAttribute('src');
-    
-    // const episodes = Array(...vidcloudvideodom.querySelectorAll('.listing.items.lists .video-block')).map(e => {
-    //     return { 
-    //         title: e.querySelector('.name').textContent.trim(),
-    //         link: e.querySelector('a').getAttribute('href')
-    //     }
-    // }).map(e => {
-    //     return {
-    //         title: e.title.slice(e.title.indexOf('Episode')),
-    //         link: e.link
-    //     }
-    // });
     this.setState({
         src: `https:${iframesrc}`,
         href: element.link

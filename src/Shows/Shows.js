@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import { tvshows } from './DB';
 import axios from 'axios';
 import { compareTwoStrings } from 'string-similarity';
+import { api, current_cors, headers } from '../Environment/environment';
 
 class Shows extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class Shows extends Component {
       console.log('src')
     const { match: { params } } = this.props;
     const showTitle = this.state.inputValue;
-    const vidcloudlist = (await axios.get(`https://vidcloud9.com/search.html`, {params: {keyword: showTitle}}));
+    const vidcloudlist = (await axios.get(`${current_cors()}/https://vidcloud9.com/search.html`, {params: {keyword: showTitle}}, headers));
 
     const parser = new DOMParser();
     const vidcloudlistdom = parser.parseFromString(vidcloudlist.data, 'text/html');
@@ -65,18 +66,6 @@ class Shows extends Component {
             shows: shows.filter(e => e !== undefined).sort((a,b) => a.title.localeCompare(b.title))
         }
     )
-    // const movies = (await axios.get(`${api}list_movies.json`, {
-    //   params: {
-    //     page: 1,
-    //     limit: this.pageLimit,
-    //     query_term: this.state.inputValue
-    //   }
-    // })).data.data;
-    // this.setState({
-    //   movies: movies.movies || [],
-    //   currentPage: 1,
-    //   totalRecords: movies.movie_count
-    // })  
   }
 
 
