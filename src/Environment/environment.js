@@ -12,4 +12,4 @@ module.exports.headers = {
         "X-Requested-With": "XMLHttpRequest",
     }
 }
-module.exports.aiap = 'http://localhost:5000/';
+module.exports.aiap = 'https://recommendation-service-cinema.herokuapp.com/';
