@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import { api } from '../Environment/environment';
+import { aiap, api } from '../Environment/environment';
 
 class Suggestions extends Component {
   constructor(props) {
@@ -12,6 +12,8 @@ class Suggestions extends Component {
   }
 
   async componentDidMount() {
+    let x = (await axios.post(`${aiap}recommendations`, {'user_id': localStorage.getItem('user_id')})).data;
+    console.log(x);
     const movies = (await axios.get(`${api}list_movies.json?sort_by=rating&with_images=true&limit=20&page=0`)).data.data.movies
 
     this.setState({
