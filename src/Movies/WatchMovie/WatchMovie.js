@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import { aiap, api, current_cors, headers } from '../../Environment/environment';
+import { api, current_cors, headers } from '../../Environment/environment';
 import { compareTwoStrings } from 'string-similarity';
 
 class WatchMovie extends Component {
@@ -38,7 +38,6 @@ class WatchMovie extends Component {
     const vidcloudvideodom = parser.parseFromString(vidcloudvideo.data, 'text/html');
 
     const iframesrc = vidcloudvideodom.querySelectorAll('iframe')[0].getAttribute('src');
-    axios.post(`${aiap}watch`, {'movie_title': movie.title_long, 'user_id': localStorage.getItem('user_id')})
     this.setState({
         movie,
         src: `https:${iframesrc}`,
